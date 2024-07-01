@@ -1,5 +1,5 @@
 {
-  "name": "owls-vite",
+  "name": "owls-vite-remix",
   "private": true,
   "version": "0.0.0",
   "sideEffects": false,
@@ -9,7 +9,7 @@
     "dev": "dotenv -- node ./server.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "fix": "npx eslint --fix .",
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "dotenv -e .env.production node ./server.js",
     "preview": "vite preview",
     "typecheck": "tsc"
   },
@@ -85,7 +85,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "compression": "1.7.4",
-    "cross-env": "7.0.3",
     "isbot": "5.1.0",
     "jotai": "^2.8.3",
     "lucide-react": "^0.394.0",
