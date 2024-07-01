@@ -23,6 +23,8 @@ export function Search() {
   const onSearch = () => {
     setSearchWord(word)
 
+    if (!word) return
+
     setDialogOpen(false)
     navigate(`/?q=${word}`)
     setWord(undefined)
