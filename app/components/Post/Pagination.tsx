@@ -125,7 +125,7 @@ export function Pagination({
               href={
                 searchWord
                   ? `/${posts[0].id}?q=${searchWord}`
-                  : `${posts[0].id}`
+                  : `/${posts[0].id}`
               }
             >
               {1}
