@@ -56,35 +56,65 @@ export async function getPostList({
 export async function getPostById({
   supabase,
   postId,
+  isLoggedIn = false,
 }: {
   supabase: SupabaseClient<Database>
   postId: string
+  isLoggedIn?: boolean
 }) {
-  const { data, error } = await supabase
-    .from('post')
-    .select('id, order, content, is_open, created_at, updated_at')
-    .eq('id', postId)
-    .eq('is_open', true)
-    .maybeSingle()
+  if (isLoggedIn) {
+    const { data, error } = await supabase
+      .from('post')
+      .select('id, order, content, is_open, created_at, updated_at')
+      .eq('id', postId)
+      .maybeSingle()
 
-  if (error) {
-    console.error('Error occurred during getPostById: ', error)
-  }
+    if (error) {
+      console.error('Error occurred during getPostById: ', error)
+    }
 
-  if (!data) return { data: undefined, error }
+    if (!data) return { data: undefined, error }
 
-  const postData = {
-    id: data.id,
-    order: data.order,
-    content: data.content as Value,
-    isOpen: data.is_open,
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
-  }
+    const postData = {
+      id: data.id,
+      order: data.order,
+      content: data.content as Value,
+      isOpen: data.is_open,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    }
 
-  return {
-    data: postData,
-    error,
+    return {
+      data: postData,
+      error,
+    }
+  } else {
+    const { data, error } = await supabase
+      .from('post')
+      .select('id, order, content, is_open, created_at, updated_at')
+      .eq('id', postId)
+      .eq('is_open', true)
+      .maybeSingle()
+
+    if (error) {
+      console.error('Error occurred during getPostById: ', error)
+    }
+
+    if (!data) return { data: undefined, error }
+
+    const postData = {
+      id: data.id,
+      order: data.order,
+      content: data.content as Value,
+      isOpen: data.is_open,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    }
+
+    return {
+      data: postData,
+      error,
+    }
   }
 }
 

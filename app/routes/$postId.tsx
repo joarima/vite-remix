@@ -53,6 +53,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const { data } = await getPostById({
       supabase: supabase,
       postId,
+      isLoggedIn: !!session,
     })
 
     const { list } = await getPostList({
