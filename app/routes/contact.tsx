@@ -53,14 +53,25 @@ export default function Contact() {
             <div className="space-y-1">
               <h4 className="text-sm font-semibold">
                 <a
+                  href="https://github.com/joarima/vite-remix"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  joarima/vite-remix
+                </a>
+              </h4>
+              <p className="text-sm break-all">github repo.</p>
+              <p className="text-sm break-all">
+                old project without remix is here:
+                <a
+                  className="text-sm font-semibold"
                   href="https://github.com/joarima/vite-react"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  @joarima/vite-react
+                  joarima/vite-react
                 </a>
-              </h4>
-              <p className="text-sm break-all">github repo.</p>
+              </p>
             </div>
           </div>
         </HoverCardContent>
