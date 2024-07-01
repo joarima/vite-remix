@@ -1,5 +1,5 @@
 export type Theme = 'light' | 'dark' | 'system'
-const storageKey = 'vite-ui-theme'
+const storageKey = 'theme'
 /**
  * This component is used to set the theme based on the value at hydration time.
  * If no value is found, it will default to the user's system preference and
@@ -40,7 +40,8 @@ export function ThemeSwitcherScript() {
           (function() {
             var theme = localStorage.getItem("theme");
             if (theme) {
-              document.documentElement.setAttribute("data-theme", theme);
+              const root = window.document.documentElement;
+              root.classList.add(theme);
             }
           })();
         `,
