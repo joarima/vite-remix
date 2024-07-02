@@ -20,6 +20,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function New() {
   const { isLoggedIn } = useAuth()
+
   return (
     <main className="container prose py-8">{isLoggedIn && <NewPost />}</main>
   )

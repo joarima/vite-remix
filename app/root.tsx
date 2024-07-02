@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   json,
-  useLoaderData,
   useRouteError,
 } from '@remix-run/react'
 
@@ -22,24 +21,15 @@ import {
 } from './components/theme-switcher'
 import { Toaster } from './components/ui/toaster'
 import './globals.css'
-import {
-  getSupabaseEnv,
-  getSupabaseWithSessionHeaders,
-} from './lib/auth.supabase.server'
+import { getSupabaseWithSessionHeaders } from './lib/auth.supabase.server'
 import { useSupabase } from './lib/auth.supabaseClient'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { session, headers } = await getSupabaseWithSessionHeaders({
+  const { headers } = await getSupabaseWithSessionHeaders({
     request,
   })
 
-  return json(
-    {
-      env: getSupabaseEnv(),
-      session,
-    },
-    { headers }
-  )
+  return json(null, { headers })
 }
 
 function App({ children }: { children: React.ReactNode }) {
@@ -106,9 +96,7 @@ function App({ children }: { children: React.ReactNode }) {
 }
 
 export default function Root() {
-  const { env, session } = useLoaderData<typeof loader>()
-
-  const { supabase } = useSupabase({ env, session })
+  const { supabase } = useSupabase()
   return (
     <App>
       <Outlet context={{ supabase }} />

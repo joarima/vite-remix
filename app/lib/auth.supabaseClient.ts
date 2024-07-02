@@ -12,24 +12,17 @@ export type SupabaseOutletContext = {
   domainUrl: string
 }
 
-type SupabaseEnv = {
-  SUPABASE_URL: string
-  SUPABASE_ANON_KEY: string
-}
-
-type UseSupabase = {
-  env: SupabaseEnv
-  session: Session | null
-}
-
 export const userAtom = atom<User | null>(null)
 export const sessionAtom = atom<Session | null>(null)
 export const supabaseAtom = atom<TypedSupabaseClient | null>(null)
 
-export function useSupabase({ env, session }: UseSupabase) {
+export function useSupabase() {
   // Singleton
   const [supabase] = useState(() =>
-    createBrowserClient<Database>(env.SUPABASE_URL!, env.SUPABASE_ANON_KEY!)
+    createBrowserClient<Database>(
+      import.meta.env.VITE_SUPABASE_URL!,
+      import.meta.env.VITE_SUPABASE_API_KEY!
+    )
   )
 
   const [, setSupabaseClient] = useAtom(supabaseAtom)
@@ -38,7 +31,15 @@ export function useSupabase({ env, session }: UseSupabase) {
 
   const revalidator = useRevalidator()
 
-  const serverAccessToken = session?.access_token
+  const [serverAccessToken, setServerAccessToken] = useState<
+    string | undefined
+  >(undefined)
+
+  supabase.auth.getSession().then(({ data }) => {
+    setServerAccessToken(data.session?.access_token)
+  })
+
+  // const serverAccessToken = data.session?.access_token
 
   const [, setUser] = useAtom(userAtom)
   const [, setSession] = useAtom(sessionAtom)
@@ -47,7 +48,7 @@ export function useSupabase({ env, session }: UseSupabase) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      // console.log('Auth event happened: ', event, session)
+      console.log('Auth event happened: ', event, session)
 
       if (event === 'SIGNED_OUT') {
         setSession(null)
