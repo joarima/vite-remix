@@ -78,7 +78,7 @@ function App({ children }: { children: React.ReactNode }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <meta name="description" content="Owlstilttheirheads." />
         <meta property="og:title" content="Owlstilttheirheads." />
-        <meta property="og:image" content="/images/owl.png" />
+        <meta property="og:image" content="/owl.png" />
         <meta property="og:description" content="Owlstilttheirheads." />
         <title>Owlstilttheirheads.</title>
         <Meta />
