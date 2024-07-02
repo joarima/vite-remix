@@ -1,11 +1,17 @@
 import NewPost from '@/components/NewPost'
+import { getSupabaseWithSessionHeaders } from '@/lib/auth.supabase.server'
 import { useAuth } from '@/lib/auth.supabaseClient'
 import { LoaderFunctionArgs } from '@remix-run/node'
 import { redirect } from '@remix-run/react'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookie = request.headers.get('cookie' as string)
-  if (!cookie) {
+  const { session } = await getSupabaseWithSessionHeaders({
+    request,
+  })
+
+  const isLoggedIn = !!session
+
+  if (!isLoggedIn) {
     throw redirect('/')
   }
 
