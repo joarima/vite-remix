@@ -80,16 +80,14 @@ export function MediaPopover({ children, pluginKey, url }: MediaPopoverProps) {
       return
     }
     // get signed url
-    const response = await fetch(
-      import.meta.env.VITE_AWS_API_URL + '/api/s3-upload',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
-      }
-    )
+    const urlFormData = new FormData()
+    urlFormData.append('filename', file.name)
+    urlFormData.append('contentType', file.type)
+
+    const response = await fetch('/api/s3-upload', {
+      method: 'POST',
+      body: urlFormData,
+    })
     if (!response.ok) {
       toast({
         title: 'signed url fetch error.',

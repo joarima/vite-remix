@@ -45,3 +45,4 @@ dist
 *.log
 .database
 .cache
+.vercel/
