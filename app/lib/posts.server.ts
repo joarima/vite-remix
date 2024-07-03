@@ -1,4 +1,4 @@
-import { Database } from '@/types/supabase'
+import { Database, Json } from '@/types/supabase'
 import { SupabaseClient } from '@supabase/supabase-js'
 import { Value } from '@udecode/plate-common'
 export async function getPostList({
@@ -232,5 +232,50 @@ export const search = async ({
         }) ?? [],
       error,
     }
+  }
+}
+
+export const savePost = async ({
+  supabase,
+  postJson,
+  isOpen,
+}: {
+  supabase: SupabaseClient<Database>
+  postJson: object
+  isOpen: boolean
+}) => {
+  console.log('postJson', postJson)
+  const { error } = await supabase.from('post').insert({
+    content: postJson as Json,
+    is_open: isOpen,
+  })
+  if (error) {
+    console.error('Error occurred during savePost: ', error)
+    throw error
+  }
+}
+
+export const updatePost = async ({
+  supabase,
+  id,
+  postJson,
+  isOpen,
+}: {
+  supabase: SupabaseClient<Database>
+  id: string
+  postJson: object
+  isOpen: boolean
+}) => {
+  const { error } = await supabase
+    .from('post')
+    .update({
+      content: postJson as Json,
+      is_open: isOpen,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+
+  if (error) {
+    throw error
   }
 }

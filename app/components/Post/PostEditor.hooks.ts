@@ -1,6 +1,5 @@
 import { supabaseAtom } from '@/lib/auth.supabaseClient'
 import { deleteDraft, getDraft } from '@/lib/editor'
-import { savePost, updatePost } from '@/lib/posts'
 import { PostRecord } from '@/types/Editor'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useNavigate } from '@remix-run/react'
@@ -63,9 +62,17 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
       return
     }
 
+    const formData = new FormData()
+    formData.append('content', JSON.stringify(content))
+    formData.append('isOpen', open ? 'true' : 'false')
+
     if (record?.id) {
       if (supabaseClient) {
-        updatePost(supabaseClient, record?.id, content, open).then(() => {
+        formData.append('id', record?.id)
+        fetch('/api/update-post', {
+          method: 'POST',
+          body: formData,
+        }).then(() => {
           toast({
             title: 'post updated.',
           })
@@ -73,13 +80,23 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
       }
     } else {
       if (supabaseClient) {
-        savePost(supabaseClient, content, open).then(() => {
-          toast({
-            title: 'new post created.',
-          })
-          if (isNewPost) {
-            deleteDraft()
-            navigate('/')
+        fetch('/new', {
+          method: 'POST',
+          body: formData,
+        }).then((res: Response) => {
+          if (res.status === 200) {
+            toast({
+              title: 'new post created.',
+            })
+            if (isNewPost) {
+              deleteDraft()
+              navigate('/')
+            }
+          } else {
+            toast({
+              title: 'some error occurred.',
+              description: `${res.body}`,
+            })
           }
         })
       }
