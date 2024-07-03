@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /microposts/
+Disallow: /search*
+Disallow: /hashtags/
