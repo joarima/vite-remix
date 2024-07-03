@@ -72,10 +72,17 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
         fetch('/api/update-post', {
           method: 'POST',
           body: formData,
-        }).then(() => {
-          toast({
-            title: 'post updated.',
-          })
+        }).then((res: Response) => {
+          if (res.status === 200) {
+            toast({
+              title: 'post updated.',
+            })
+          } else {
+            toast({
+              title: 'some error occurred.',
+              description: `${res.body}`,
+            })
+          }
         })
       }
     } else {
