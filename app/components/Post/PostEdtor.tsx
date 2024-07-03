@@ -111,11 +111,19 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
               >
                 <div
                   ref={containerRef}
-                  className={cn(
-                    'relative',
-                    // Block selection
-                    '[&_.slate-start-area-left]:!w-[64px] [&_.slate-start-area-right]:!w-[64px] [&_.slate-start-area-top]:!h-4'
-                  )}
+                  className={
+                    isLoggedIn
+                      ? cn(
+                          'relative',
+                          // Block selection
+                          '[&_.slate-start-area-left]:!w-[22px] [&_.slate-start-area-right]:!w-[22px] [&_.slate-start-area-top]:!h-4'
+                        )
+                      : cn(
+                          'relative',
+                          // Block selection
+                          '[&_.slate-start-area-left]:!w-[0px] [&_.slate-start-area-right]:!w-[0px] [&_.slate-start-area-top]:!h-4'
+                        )
+                  }
                 >
                   {isLoggedIn && (
                     <FixedToolbar>
