@@ -14,6 +14,8 @@ import {
 } from '@udecode/plate-media'
 import { ResizableProvider, useResizableStore } from '@udecode/plate-resizable'
 
+import { themeAtom } from '@/lib/theme'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { CaptionTextareaSimple } from '../patch/CaptionTextArea'
 import { Caption } from './caption'
@@ -66,6 +68,8 @@ type OgpInfo = {
 const Ogp = (url?: string) => {
   const [ogpInfo, setOgpInfo] = useState<OgpInfo | undefined>(undefined)
 
+  const [theme] = useAtom(themeAtom)
+
   const getOgpInfo = async (url?: string) => {
     if (!url) return undefined
     const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`
@@ -98,7 +102,9 @@ const Ogp = (url?: string) => {
   if (!url) return <p>no url</p>
 
   return (
-    <div className="p-3 border rounded-lg border-solid border-gray-200 hover:bg-blue-50">
+    <div
+      className={`p-3 border rounded-lg border-solid border-gray-200 ${theme === 'light' ? 'hover:bg-blue-50' : 'hover:bg-gray-900'}`}
+    >
       <a
         href={url}
         target="_blank"

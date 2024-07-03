@@ -1,3 +1,7 @@
+import { themeAtom } from '@/lib/theme'
+import { useAtom } from 'jotai'
+import { useEffect } from 'react'
+
 export type Theme = 'light' | 'dark' | 'system'
 const storageKey = 'theme'
 /**
@@ -70,6 +74,18 @@ export function toggleTheme() {
   const newTheme = currentTheme === 'light' ? 'dark' : 'light'
   localStorage.setItem('theme', newTheme)
   document.documentElement.setAttribute('data-theme', newTheme)
+}
+
+export function useTheme() {
+  const [, setTheme] = useAtom(themeAtom)
+  useEffect(() => {
+    if (typeof localStorage !== 'undefined') {
+      const theme = localStorage.getItem('theme')
+      if (theme) {
+        setTheme(theme as Theme)
+      }
+    }
+  }, [])
 }
 
 export function setTheme(theme: Theme | string) {

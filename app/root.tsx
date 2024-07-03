@@ -18,6 +18,7 @@ import Header from './components/Layout/Header'
 import {
   ThemeSwitcherSafeHTML,
   ThemeSwitcherScript,
+  useTheme,
 } from './components/theme-switcher'
 import { Toaster } from './components/ui/toaster'
 import './globals.css'
@@ -97,6 +98,7 @@ function App({ children }: { children: React.ReactNode }) {
 
 export default function Root() {
   const { supabase } = useSupabase()
+  useTheme()
   return (
     <App>
       <Outlet context={{ supabase }} />
