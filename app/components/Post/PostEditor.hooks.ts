@@ -1,10 +1,8 @@
-import { supabaseAtom } from '@/lib/auth.supabaseClient'
 import { deleteDraft, getDraft } from '@/lib/editor'
 import { PostRecord } from '@/types/Editor'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useNavigate } from '@remix-run/react'
+import { useNavigate, useRevalidator } from '@remix-run/react'
 import { Value } from '@udecode/plate-common'
-import { useAtom } from 'jotai'
 import { useEffect, useMemo, useState } from 'react'
 import { useToast } from '../ui/use-toast'
 
@@ -51,7 +49,7 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
     setOpen(record?.isOpen ?? false)
   }, [record?.content, record?.isOpen])
 
-  const [supabaseClient] = useAtom(supabaseAtom)
+  const revalidator = useRevalidator()
 
   const onSave = () => {
     setIsPosting(true)
@@ -67,46 +65,43 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
     formData.append('isOpen', open ? 'true' : 'false')
 
     if (record?.id) {
-      if (supabaseClient) {
-        formData.append('id', record?.id)
-        fetch('/api/update-post', {
-          method: 'POST',
-          body: formData,
-        }).then((res: Response) => {
-          if (res.status === 200) {
-            toast({
-              title: 'post updated.',
-            })
-          } else {
-            toast({
-              title: 'some error occurred.',
-              description: `${res.body}`,
-            })
-          }
-        })
-      }
+      formData.append('id', record?.id)
+      fetch('/api/update-post', {
+        method: 'POST',
+        body: formData,
+      }).then((res: Response) => {
+        if (res.status === 200) {
+          revalidator.revalidate()
+          toast({
+            title: 'post updated.',
+          })
+        } else {
+          toast({
+            title: 'some error occurred.',
+            description: `${res.body}`,
+          })
+        }
+      })
     } else {
-      if (supabaseClient) {
-        fetch('/new', {
-          method: 'POST',
-          body: formData,
-        }).then((res: Response) => {
-          if (res.status === 200) {
-            toast({
-              title: 'new post created.',
-            })
-            if (isNewPost) {
-              deleteDraft()
-              navigate('/')
-            }
-          } else {
-            toast({
-              title: 'some error occurred.',
-              description: `${res.body}`,
-            })
+      fetch('/new', {
+        method: 'POST',
+        body: formData,
+      }).then((res: Response) => {
+        if (res.status === 200) {
+          toast({
+            title: 'new post created.',
+          })
+          if (isNewPost) {
+            deleteDraft()
+            navigate('/')
           }
-        })
-      }
+        } else {
+          toast({
+            title: 'some error occurred.',
+            description: `${res.body}`,
+          })
+        }
+      })
     }
     setIsPosting(false)
   }
