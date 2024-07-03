@@ -106,6 +106,36 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
     setIsPosting(false)
   }
 
+  const deletePost = () => {
+    if (record?.id) {
+      if (window.confirm('Delete?')) {
+        const formData = new FormData()
+        formData.append('id', record?.id)
+        fetch('/api/delete-post', {
+          method: 'DELETE',
+          body: formData,
+        }).then((res: Response) => {
+          if (res.status === 200) {
+            revalidator.revalidate()
+            toast({
+              title: 'post successfully deleted.',
+            })
+            navigate('/')
+          } else {
+            toast({
+              title: 'some error occurred.',
+              description: `${res.body}`,
+            })
+          }
+        })
+      }
+    } else {
+      toast({
+        title: 'post not found.',
+      })
+    }
+  }
+
   return {
     initialValue,
     setEditorState,
@@ -114,5 +144,6 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
     isPosting,
     onSave,
     isHydrated,
+    deletePost,
   }
 }

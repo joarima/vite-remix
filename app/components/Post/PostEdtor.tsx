@@ -37,6 +37,7 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
     isPosting,
     onSave,
     isHydrated,
+    deletePost,
   } = usePostEditor(record, isNewPost)
 
   const containerRef = useRef(null)
@@ -62,7 +63,7 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
           </p>
         )}
         {isLoggedIn && (
-          <div className="items-top flex space-x-2">
+          <div className="items-top flex space-x-2 items-center">
             <Checkbox
               id="terms1"
               key={postId ?? 'new'}
@@ -77,6 +78,15 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
                 open
               </label>
             </div>
+            {!isNewPost && (
+              <Button
+                onClick={() => {
+                  deletePost()
+                }}
+              >
+                Delete
+              </Button>
+            )}
           </div>
         )}
       </div>

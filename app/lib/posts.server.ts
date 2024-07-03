@@ -279,3 +279,20 @@ export const updatePost = async ({
     throw error
   }
 }
+
+export const deletePost = async ({
+  supabase,
+  id,
+}: {
+  supabase: SupabaseClient<Database>
+  id: string
+}) => {
+  console.log(id)
+  const { data, error } = await supabase.from('post').delete().eq('id', id)
+
+  console.log(data)
+
+  if (error) {
+    throw error
+  }
+}
