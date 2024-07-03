@@ -3,3 +3,5 @@ Allow: /
 Disallow: /microposts/
 Disallow: /search*
 Disallow: /hashtags/
+Disallow: /users/
+Disallow: /uploads/
