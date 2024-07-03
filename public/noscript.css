@@ -1,0 +1,3 @@
+div:has(img.custom-image) {
+  width: 100% !important;
+}

@@ -74,6 +74,9 @@ function App({ children }: { children: React.ReactNode }) {
         <title>Owlstilttheirheads.</title>
         <Meta />
         <Links />
+        <noscript>
+          <link rel="stylesheet" href="/noscript.css"></link>
+        </noscript>
         <ThemeSwitcherScript />
       </head>
 

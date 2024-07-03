@@ -103,3 +103,7 @@ html::-webkit-scrollbar {
     padding: 2rem;
   }
 }
+
+div:has(img.custom-image) {
+  width: 100%;
+}

@@ -45,7 +45,7 @@ export const ImageElement = withHOC(
                 <Image
                   alt=""
                   className={cn(
-                    'block w-full max-w-full cursor-pointer object-cover px-0',
+                    'custom-image block w-full max-w-full cursor-pointer object-cover px-0',
                     'rounded-sm',
                     focused && selected && 'ring-2 ring-ring ring-offset-2'
                   )}
