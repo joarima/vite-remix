@@ -85,7 +85,7 @@ function App({ children }: { children: React.ReactNode }) {
         <GlobalPendingIndicator />
         <div id="root">
           <React.StrictMode>
-            <div className="my-14 hidden-scrollbar !font-sans !font-thin">
+            <div className="my-16 hidden-scrollbar !font-sans !font-thin">
               <Header />
               {children}
               <Toaster />

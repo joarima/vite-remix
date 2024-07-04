@@ -1,12 +1,6 @@
-// import { json } from '@remix-run/node'
-
-// export const loader = async () => {
-//   return json({})
-// }
-
 export default function About() {
   return (
-    <section className="font-sans font-thin">
+    <section className="font-sans font-thin pt-8">
       <h1 className="scroll-m-20 text-4xl  tracking-tight lg:text-5xl">
         About
       </h1>

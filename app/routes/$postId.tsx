@@ -83,7 +83,7 @@ export default function Index() {
   const { postId, post, list } = useLoaderData<typeof loader>()
 
   return (
-    <main className="container prose py-8">
+    <main className="container prose">
       <Post
         postId={postId}
         record={post as PostRecord}

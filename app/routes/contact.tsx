@@ -8,7 +8,7 @@ import {
 
 export default function Contact() {
   return (
-    <section>
+    <section className="pt-8">
       <h1 className="scroll-m-20 text-4xl  tracking-tight lg:text-5xl font-thin">
         Contact
       </h1>
