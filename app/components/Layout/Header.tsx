@@ -28,10 +28,10 @@ export default function Header() {
   return (
     <nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-gray-950/90 font-sans font-thin h-16">
       <div className="w-full max-w-7xl mx-auto">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex h-16">
           <Link
             to={'/'}
-            className="flex flex-shrink-0 items-center ml-[5px] sm:ml-8"
+            className="flex flex-0 sm:flex-1 flex-shrink-0 items-center ml-[5px] sm:ml-8 justify-start"
             onClick={resetSearch}
           >
             {!hydrated || theme == 'light' ? (
@@ -40,7 +40,7 @@ export default function Header() {
               <img src="owlwhite.png" className="h-12" />
             )}
           </Link>
-          <nav className="flex gap-4">
+          <nav className="flex gap-4 flex-1 justify-start sm:justify-center ml-4 sm:ml-0">
             <Link
               to={'/'}
               className="flex items-center text-sm transition-colors hover:underline"
@@ -72,7 +72,7 @@ export default function Header() {
               Contact
             </Link>
           </nav>
-          <div className="flex items-center gap-4 mr-[5px] sm:mr-8">
+          <div className="flex flex-1 items-center gap-1 sm:gap-4 mr-[5px] sm:mr-8 justify-end">
             <Search />
             <ModeToggle />
             {isLoggedIn ? <SignOut /> : <SignInDialog />}
