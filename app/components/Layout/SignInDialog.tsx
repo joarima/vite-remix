@@ -10,36 +10,45 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/components/ui/use-toast'
+// import { supabaseServerClient } from '@/lib/supabase.server'
+import { useNavigate, useRevalidator } from '@remix-run/react'
 import { useState } from 'react'
 
-import { supabaseAtom } from '@/lib/auth.supabaseClient'
-import { useAtom } from 'jotai'
-
-export function SignInDialog() {
+export default function SignInDialog() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [supabaseClient] = useAtom(supabaseAtom)
+
+  const navigate = useNavigate()
+  const { toast } = useToast()
+  const revalidator = useRevalidator()
+
   const onSubmit = async () => {
-    // sign in request
-    try {
-      if (email === '' || password === '') return
-
-      if (!supabaseClient) return
-      const { error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        throw new Error(error.message)
+    const formData = new FormData()
+    formData.append('email', email)
+    formData.append('password', password)
+    fetch('/api/signin', {
+      method: 'POST',
+      body: formData,
+    }).then((res: Response) => {
+      if (res.status === 200) {
+        revalidator.revalidate()
+        toast({
+          title: 'sign in.',
+        })
+        setDialogOpen(false)
+        navigate('/')
+      } else {
+        toast({
+          title: 'some error occurred.',
+          description: `${res.body}`,
+        })
+        setDialogOpen(false)
       }
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setDialogOpen(false)
-    }
+    })
   }
+
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
@@ -54,51 +63,56 @@ export function SignInDialog() {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle className="font-thin">Sign In</DialogTitle>
-          <DialogDescription className="font-thin">
-            Sign in to edit.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right font-thin">
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              className="col-span-3"
-              onChange={(e) => {
-                setEmail(e.target.value)
-              }}
-            />
+        <form>
+          <DialogHeader>
+            <DialogTitle className="font-thin">Sign In</DialogTitle>
+            <DialogDescription className="font-thin">
+              Sign in to edit.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right font-thin">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                name="email"
+                className="col-span-3"
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                }}
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="password" className="text-right font-thin">
+                Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                className="col-span-3"
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                }}
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="password" className="text-right font-thin">
-              Password
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              className="col-span-3"
-              onChange={(e) => {
-                setPassword(e.target.value)
+          <DialogFooter>
+            <Button
+              className="font-thin"
+              type="submit"
+              onClick={(event) => {
+                event.preventDefault()
+                onSubmit()
               }}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button
-            className="font-thin"
-            type="submit"
-            onClick={() => {
-              onSubmit()
-            }}
-          >
-            Sign In
-          </Button>
-        </DialogFooter>
+            >
+              Sign In
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

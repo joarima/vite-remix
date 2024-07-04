@@ -3,14 +3,14 @@ import { searchAtom } from '@/atoms/SearchAtom'
 import { themeAtom } from '@/lib/theme'
 
 import { useAuth } from '@/lib/auth.supabaseClient'
-import SignInDialog from '@/routes/signin'
-import SignOut from '@/routes/signout'
 import { Link } from '@remix-run/react'
 import { useAtom, useSetAtom } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import { useHydrated } from 'remix-utils/use-hydrated'
 import { ModeToggle } from './ModeToggle'
 import { Search } from './Search'
+import SignInDialog from './SignInDialog'
+import SignOutButton from './SignOutButton'
 
 // https://v0.dev/t/xYHqD5MkVkT
 export default function Header() {
@@ -75,7 +75,7 @@ export default function Header() {
           <div className="flex flex-1 items-center gap-1 sm:gap-4 mr-[5px] sm:mr-8 justify-end">
             <Search />
             <ModeToggle />
-            {isLoggedIn ? <SignOut /> : <SignInDialog />}
+            {isLoggedIn ? <SignOutButton /> : <SignInDialog />}
             {/* for user create */}
             {/* <SignUpDialog /> */}
           </div>
