@@ -12,6 +12,7 @@ import {
 import { GlobalPendingIndicator } from '@/components/global-pending-indicator'
 
 import { LoaderFunctionArgs } from '@remix-run/node'
+import { SpeedInsights } from '@vercel/speed-insights/remix'
 import React from 'react'
 import Footer from './components/Layout/Footer'
 import Header from './components/Layout/Header'
@@ -94,6 +95,7 @@ function App({ children }: { children: React.ReactNode }) {
         </div>
         <ScrollRestoration />
         <Scripts />
+        <SpeedInsights />
       </body>
     </ThemeSwitcherSafeHTML>
   )

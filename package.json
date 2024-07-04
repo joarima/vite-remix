@@ -84,6 +84,7 @@
     "@udecode/plate-toggle": "^34.0.0",
     "@udecode/plate-trailing-block": "^34.0.0",
     "@vercel/remix": "^2.10.0",
+    "@vercel/speed-insights": "^1.0.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
