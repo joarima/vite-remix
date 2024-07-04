@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
 import type { TextareaAutosizeProps } from 'react-textarea-autosize'
 
@@ -39,9 +39,16 @@ const onChange = (
 
 // https://github.dev/udecode/plate/blob/d8a3e8882a18fb7a7e7970cf23288cd352e29766/packages/caption/src/components/CaptionTextarea.tsx#L152-L153
 // 元の CaptionTextArea は日本語入力がうまくできなかったので ↑ の内容の中で最低限のものだけ抜き出した
-type Props = { placeholder: string; readOnly: boolean }
+type Props = {
+  placeholder: string
+  readOnly: boolean
+}
 
-export const CaptionTextareaSimple = ({ placeholder, readOnly }: Props) => {
+export const CaptionTextareaSimple = forwardRef(function CaptionTextareaSimple(
+  props: Props,
+  ref: React.LegacyRef<HTMLTextAreaElement>
+) {
+  const { placeholder, readOnly } = props as Props
   const element = useElement<TCaptionElement>()
   const editor = useEditorRef()
   const {
@@ -61,6 +68,7 @@ export const CaptionTextareaSimple = ({ placeholder, readOnly }: Props) => {
       }}
       placeholder={placeholder}
       readOnly={readOnly}
+      ref={ref}
     />
   )
-}
+})

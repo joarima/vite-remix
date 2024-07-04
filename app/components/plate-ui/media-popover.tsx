@@ -33,9 +33,15 @@ export interface MediaPopoverProps {
   children: React.ReactNode
   pluginKey?: string
   url?: string
+  onCaptionButtonClick?: () => void
 }
 
-export function MediaPopover({ children, pluginKey, url }: MediaPopoverProps) {
+export function MediaPopover({
+  children,
+  pluginKey,
+  url,
+  onCaptionButtonClick,
+}: MediaPopoverProps) {
   const { toast } = useToast()
   const readOnly = useReadOnly()
   const selected = useSelected()
@@ -164,7 +170,9 @@ export function MediaPopover({ children, pluginKey, url }: MediaPopoverProps) {
               Edit link
             </FloatingMediaPrimitive.EditButton>
 
-            <CaptionButton variant="ghost">Caption</CaptionButton>
+            <CaptionButton variant="ghost" onClick={onCaptionButtonClick}>
+              Caption
+            </CaptionButton>
 
             <Separator className="my-1" orientation="vertical" />
 
