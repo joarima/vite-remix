@@ -118,7 +118,7 @@ export const LinkCardElement = withRef<typeof PlateElement>(
               ) : (
                 <p className="flex-1">no image</p>
               )}
-              <div className="flex-1 p-2">
+              <div className="flex-1 p-2 w-full">
                 {!readOnly ? (
                   <input
                     className={`font-bold min-w-full max-w-full bg-transparent`}
