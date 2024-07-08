@@ -100,6 +100,11 @@ import { createDeserializeCsvPlugin } from '@udecode/plate-serializer-csv'
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx'
 import { createDeserializeMdPlugin } from '@udecode/plate-serializer-md'
 
+import {
+  ELEMENT_LINK_CARD,
+  LinkCardElement,
+  createLinkCardPlugin,
+} from '@/components/custom-plate-ui/LinkCard'
 import { BlockquoteElement } from '@/components/plate-ui/blockquote-element'
 import { CodeBlockElement } from '@/components/plate-ui/code-block-element'
 import { CodeLeaf } from '@/components/plate-ui/code-leaf'
@@ -177,7 +182,11 @@ export const plugins = createPlugins(
         props: {
           validTypes: [
             ELEMENT_PARAGRAPH,
-            // ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK
+            ELEMENT_H1,
+            ELEMENT_H2,
+            ELEMENT_H3,
+            ELEMENT_BLOCKQUOTE,
+            ELEMENT_CODE_BLOCK,
           ],
         },
       },
@@ -187,7 +196,11 @@ export const plugins = createPlugins(
         props: {
           validTypes: [
             ELEMENT_PARAGRAPH,
-            // ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_BLOCK
+            ELEMENT_H1,
+            ELEMENT_H2,
+            ELEMENT_H3,
+            ELEMENT_BLOCKQUOTE,
+            ELEMENT_CODE_BLOCK,
           ],
         },
       },
@@ -270,10 +283,12 @@ export const plugins = createPlugins(
     createDeserializeCsvPlugin(),
     createDeserializeMdPlugin(),
     createJuicePlugin(),
+    createLinkCardPlugin(),
   ],
   {
     components: withDraggables(
       withPlaceholders({
+        [ELEMENT_LINK_CARD]: LinkCardElement,
         [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
         [ELEMENT_CODE_BLOCK]: CodeBlockElement,
         [ELEMENT_CODE_LINE]: CodeLineElement,

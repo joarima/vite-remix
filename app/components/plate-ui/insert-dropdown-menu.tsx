@@ -27,6 +27,8 @@ import {
   insertMedia,
 } from '@udecode/plate-media'
 import { ELEMENT_TABLE, insertTable } from '@udecode/plate-table'
+import { ELEMENT_LINK_CARD } from '../custom-plate-ui/LinkCard'
+import { insertLinkCard } from '../custom-plate-ui/insertLinkCard'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -120,6 +122,12 @@ const items = [
         icon: Icons.embed,
       },
       {
+        value: ELEMENT_LINK_CARD,
+        label: 'Link Card',
+        description: 'Link Card',
+        icon: Icons.notebook,
+      },
+      {
         value: ELEMENT_EXCALIDRAW,
         label: 'Excalidraw',
         description: 'Excalidraw',
@@ -182,6 +190,11 @@ export function InsertDropdownMenu(props: DropdownMenuProps) {
                         insertMedia(editor, {
                           type: ELEMENT_MEDIA_EMBED,
                         })
+
+                        break
+                      }
+                      case ELEMENT_LINK_CARD: {
+                        insertLinkCard(editor)
 
                         break
                       }

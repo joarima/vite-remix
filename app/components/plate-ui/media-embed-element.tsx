@@ -65,7 +65,7 @@ type OgpInfo = {
   description?: string
 }
 
-const Ogp = (url?: string) => {
+const Ogp = (readOnly: boolean, url?: string) => {
   const [ogpInfo, setOgpInfo] = useState<OgpInfo | undefined>(undefined)
 
   const [theme] = useAtom(themeAtom)
@@ -225,15 +225,15 @@ export const MediaEmbedElement = withHOC(
 
               {!isVideo && !isTweet && (
                 <div className="">
-                  {/* <iframe
+                  <iframe
                     className={cn(
                       'absolute left-0 top-0 size-full rounded-sm',
                       focused && selected && 'ring-2 ring-ring ring-offset-2'
                     )}
                     src={embed!.url}
                     title="embed"
-                  /> */}
-                  {Ogp(embed!.url)}
+                  />
+                  {/* {Ogp(readOnly, embed!.url)} */}
                 </div>
               )}
 

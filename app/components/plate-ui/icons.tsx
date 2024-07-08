@@ -38,6 +38,7 @@ import {
   Minus,
   Moon,
   MoreHorizontal,
+  NotebookText,
   Outdent,
   PaintBucket,
   PenTool,
@@ -225,6 +226,7 @@ export const Icons = {
   underline: Underline,
   unlink: Link2Off,
   viewing: Eye,
+  notebook: NotebookText,
 
   // www
   gitHub: (props: LucideProps) => (
