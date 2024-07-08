@@ -1,6 +1,5 @@
 'use client'
 
-
 import { cn, withRef } from '@udecode/cn'
 import { PlateElement } from '@udecode/plate-common'
 
@@ -13,7 +12,7 @@ export const BlockquoteElement = withRef<typeof PlateElement>(
         ref={ref}
         {...props}
       >
-        <blockquote>{children}</blockquote>
+        <blockquote className="break-all">{children}</blockquote>
       </PlateElement>
     )
   }
