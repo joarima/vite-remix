@@ -170,7 +170,7 @@ export function MediaPopover({
               Edit link
             </FloatingMediaPrimitive.EditButton>
 
-            <CaptionButton variant="ghost" onClick={onCaptionButtonClick}>
+            <CaptionButton variant="ghost" /*onClick={onCaptionButtonClick}*/>
               Caption
             </CaptionButton>
 
