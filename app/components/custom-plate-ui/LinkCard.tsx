@@ -113,11 +113,13 @@ export const LinkCardElement = withRef<typeof PlateElement>(
                 }
               }}
             >
-              {image ? (
-                <img className="flex-1 sm:max-w-[50%] p-2" src={image} />
-              ) : (
-                <p className="flex-1">no image</p>
-              )}
+              <div className="flex-1 sm:max-w-[50%] p-2 h-auto">
+                {image ? (
+                  <img className="w-full" src={image} />
+                ) : (
+                  <p className="flex-1">no image</p>
+                )}
+              </div>
               <div className="flex-1 p-2 w-full">
                 {!readOnly ? (
                   <input
