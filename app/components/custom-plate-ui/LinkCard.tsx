@@ -140,9 +140,6 @@ export const LinkCardElement = withRef<typeof PlateElement>(
                   readOnly={readOnly}
                   minRows={10}
                   maxRows={100}
-                  onHeightChange={(e) => {
-                    console.log('height changed', e)
-                  }}
                   cacheMeasurements
                 />
               </div>
