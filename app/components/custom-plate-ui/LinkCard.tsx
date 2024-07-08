@@ -1,6 +1,15 @@
 import { themeAtom } from '@/lib/theme'
-import { createPluginFactory, useEditorRef } from '@udecode/plate-common'
+import {
+  createPluginFactory,
+  findNodePath,
+  PlateElement,
+  setNodes,
+  useEditorReadOnly,
+  useEditorRef,
+  withRef,
+} from '@udecode/plate-common'
 
+import { TextareaAutosize } from '@udecode/plate-caption'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
 import { TLinkCardElement } from './types'
@@ -12,94 +21,145 @@ export const createLinkCardPlugin = createPluginFactory({
   isElement: true,
 })
 
-type OgpInfo = {
-  image?: string
-  site_name?: string
-  title?: string
-  type?: string
-  url?: string
-  description?: string
-}
+export const LinkCardElement = withRef<typeof PlateElement>(
+  ({ children, ...props }, ref) => {
+    const [theme] = useAtom(themeAtom)
+    const element = props.element as TLinkCardElement
 
-export function LinkCardElement({
-  children,
-  attributes,
-  node,
-  url,
-  title,
-  description,
-  imageUrl,
-}: TLinkCardElement) {
-  const [theme] = useAtom(themeAtom)
-  const [titlee, setTitle] = useState<string | undefined>(title)
-  const [descriptionn, setDescription] = useState<string | undefined>(
-    description
-  )
-  const [image, setImage] = useState<string | undefined>(imageUrl)
+    const [url, setUrl] = useState<string | undefined>(element.url)
+    const [title, setTitle] = useState<string | undefined>(element.title)
+    const [description, setDescription] = useState<string | undefined>(
+      element.description
+    )
+    const [image, setImage] = useState<string | undefined>(element.imageUrl)
 
-  const getOgpInfo = async (url?: string) => {
-    if (!url) {
-      setTitle(undefined)
-      setDescription(undefined)
-      setImage(undefined)
-      return
+    const editor = useEditorRef()
+    const readOnly = useEditorReadOnly()
+
+    const onChangeUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!url) return
+      const newValue = e.target.value
+      if (!newValue.startsWith('http://') && !newValue.startsWith('https://')) {
+        alert('Please enter a valid URL starting with http:// or https://')
+        setUrl(undefined)
+        return
+      }
+      setUrl(newValue)
+      const path = findNodePath(editor, element)
+
+      if (!path) return
+
+      setNodes<TLinkCardElement>(editor, { url: newValue }, { at: path })
     }
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`
-    const response = await fetch(proxyUrl)
-    const html = await response.text()
-    const domParser = new DOMParser()
-    const dom = domParser.parseFromString(html, 'text/html')
-    const ogp = Object.fromEntries(
-      [...dom.head.children]
-        .filter(
-          (element) =>
-            element.tagName === 'META' &&
-            element.getAttribute('property')?.startsWith('og:')
-        )
-        .map((element) => {
-          return [
-            element.getAttribute('property')?.replace('og:', ''),
-            element.getAttribute('content'),
-          ]
-        })
-    ) as OgpInfo
+    const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.target.value)
+      const newValue = e.target.value
 
-    setTitle(ogp?.title ?? undefined)
-    setDescription(ogp?.description ?? undefined)
-    setImage(ogp?.image ?? undefined)
-  }
+      const path = findNodePath(editor, element)
 
-  const editor = useEditorRef()
-  return (
-    <div>
-      <div
-        className={`p-3 border rounded-lg border-solid border-gray-200 ${theme === 'light' ? 'hover:bg-blue-50' : 'hover:bg-gray-900'}`}
-      >
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex w-full divide-x-2 > *"
-        >
-          <div className="flex-1 p-2">
-            <p className="font-bold">{titlee ?? 'no title'}</p>
-            <textarea
-              className="mt-4"
-              onChange={(e) => {
-                setDescription(e.target.value)
+      if (!path) return
+
+      setNodes<TLinkCardElement>(editor, { title: newValue }, { at: path })
+    }
+    const onChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setDescription(e.target.value)
+      const newValue = e.target.value
+
+      const path = findNodePath(editor, element)
+
+      if (!path) return
+
+      setNodes<TLinkCardElement>(
+        editor,
+        { description: newValue },
+        { at: path }
+      )
+    }
+
+    const onChangeImageUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value
+      console.log(newValue)
+      setImage(newValue)
+      const path = findNodePath(editor, element)
+
+      if (!path) return
+
+      setNodes<TLinkCardElement>(editor, { imageUrl: newValue }, { at: path })
+    }
+
+    return (
+      <PlateElement asChild ref={ref} {...props}>
+        <div contentEditable={false} style={{ userSelect: 'none' }}>
+          <div
+            className={`p-3 border rounded-lg border-solid border-gray-200 ${theme === 'light' ? 'hover:bg-blue-50' : 'hover:bg-gray-900'}`}
+          >
+            {!readOnly && (
+              <input
+                type="text"
+                className="w-full "
+                defaultValue={url}
+                placeholder="Link URL"
+                onChange={onChangeUrl}
+              />
+            )}
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start w-full flex-col sm:flex-row "
+              onClick={(e) => {
+                if (!readOnly) {
+                  e.preventDefault()
+                }
               }}
             >
-              {descriptionn}
-            </textarea>
+              {image ? (
+                <img className="flex-1 sm:max-w-[50%] p-2" src={image} />
+              ) : (
+                <p className="flex-1">no image</p>
+              )}
+              <div className="flex-1 p-2">
+                {!readOnly ? (
+                  <input
+                    className={`font-bold min-w-full max-w-full bg-transparent`}
+                    defaultValue={title ?? 'no title'}
+                    onChange={onChangeTitle}
+                    readOnly={readOnly}
+                  ></input>
+                ) : (
+                  <p
+                    className={`font-bold min-w-full max-w-full bg-transparent break-all`}
+                  >
+                    {title ?? 'no title'}
+                  </p>
+                )}
+                <TextareaAutosize
+                  className={`mt-4 min-w-full resize-none bg-transparent focus:outline-none border-0`}
+                  defaultValue={description}
+                  onChange={onChangeDescription}
+                  readOnly={readOnly}
+                  minRows={10}
+                  maxRows={100}
+                  onHeightChange={(e) => {
+                    console.log('height changed', e)
+                  }}
+                  cacheMeasurements
+                />
+              </div>
+            </a>
+            {!readOnly && (
+              <input
+                type="text"
+                className="w-full "
+                defaultValue={image}
+                placeholder="Image URL"
+                onChange={onChangeImageUrl}
+              />
+            )}
+            <p className="invisible hidden">{children}</p>
           </div>
-          {image ? (
-            <img className="flex-1 max-w-[50%] p-2" src={image} />
-          ) : (
-            <p className="flex-1">no image</p>
-          )}
-        </a>
-        <p className="invisible">{children}</p>
-      </div>
-    </div>
-  )
-}
+        </div>
+      </PlateElement>
+    )
+  }
+)
