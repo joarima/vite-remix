@@ -60,10 +60,6 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
       return
     }
 
-    console.log(content)
-    setIsPosting(false)
-    return
-
     const formData = new FormData()
     formData.append('content', JSON.stringify(content))
     formData.append('isOpen', open ? 'true' : 'false')
