@@ -140,9 +140,8 @@ export const LinkCardElement = withRef<typeof PlateElement>(
                   defaultValue={description}
                   onChange={onChangeDescription}
                   readOnly={readOnly}
-                  minRows={10}
-                  maxRows={100}
-                  cacheMeasurements
+                  minRows={1}
+                  maxRows={30}
                 />
               </div>
             </a>
