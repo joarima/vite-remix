@@ -11,14 +11,14 @@ export const LinkElement = withRef<typeof PlateElement>(
       <PlateElement
         asChild
         className={cn(
-          'font-medium text-primary underline decoration-primary underline-offset-4',
+          'font-medium text-primary underline decoration-primary underline-offset-4 break-all',
           className
         )}
         ref={ref}
         {...(linkProps as any)}
         {...props}
       >
-        <a target="_blank" rel="noopener noreferrer">
+        <a className="break-all" target="_blank" rel="noopener noreferrer">
           {children}
         </a>
       </PlateElement>
