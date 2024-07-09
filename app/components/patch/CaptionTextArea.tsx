@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 
 import type { TextareaAutosizeProps } from 'react-textarea-autosize'
 
@@ -17,7 +17,32 @@ import {
 
 import type { TCaptionElement } from '@udecode/plate-caption'
 
-import { TextareaAutosize } from '@udecode/plate-caption'
+import {
+  captionActions,
+  captionGlobalStore,
+  TextareaAutosize,
+} from '@udecode/plate-caption'
+import { Path } from 'slate'
+
+export const useCaptionTextareaFocus = (
+  textareaRef: React.RefObject<HTMLTextAreaElement>
+) => {
+  const editor = useEditorRef()
+  const element = useElement<TCaptionElement>()
+
+  const focusCaptionPath = captionGlobalStore.use.focusEndCaptionPath()
+
+  React.useEffect(() => {
+    if (focusCaptionPath && textareaRef.current) {
+      const path = findNodePath(editor, element)
+
+      if (path && Path.equals(path, focusCaptionPath)) {
+        textareaRef.current.focus()
+        captionGlobalStore.set.focusEndCaptionPath(null)
+      }
+    }
+  }, [editor, element, focusCaptionPath, textareaRef])
+}
 
 const onChange = (
   e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -44,10 +69,7 @@ type Props = {
   readOnly: boolean
 }
 
-export const CaptionTextareaSimple = forwardRef(function CaptionTextareaSimple(
-  props: Props,
-  ref: React.LegacyRef<HTMLTextAreaElement>
-) {
+export function CaptionTextareaSimple(props: Props) {
   const { placeholder, readOnly } = props as Props
   const element = useElement<TCaptionElement>()
   const editor = useEditorRef()
@@ -59,6 +81,17 @@ export const CaptionTextareaSimple = forwardRef(function CaptionTextareaSimple(
     nodeCaption[0]
   )
 
+  const onBlur: TextareaAutosizeProps['onBlur'] = (e) => {
+    const currentValue = e.target.value
+
+    if (currentValue.length === 0) {
+      captionActions.showCaptionId(null)
+    }
+  }
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
+
+  useCaptionTextareaFocus(textareaRef)
+
   return (
     <TextareaAutosize
       className="mt-2 w-full resize-none border-none bg-inherit p-0 font-[inherit] text-inherit focus:outline-none focus:[&::placeholder]:opacity-0 text-center print:placeholder:text-transparent"
@@ -66,9 +99,10 @@ export const CaptionTextareaSimple = forwardRef(function CaptionTextareaSimple(
       onChange={(e) => {
         onChange(e, element, editor)
       }}
+      onBlur={onBlur}
       placeholder={placeholder}
       readOnly={readOnly}
-      ref={ref}
+      ref={textareaRef}
     />
   )
-})
+}

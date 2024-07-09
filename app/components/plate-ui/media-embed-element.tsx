@@ -16,7 +16,7 @@ import { ResizableProvider, useResizableStore } from '@udecode/plate-resizable'
 
 import { themeAtom } from '@/lib/theme'
 import { useAtom } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CaptionTextareaSimple } from '../patch/CaptionTextArea'
 import { Caption } from './caption'
 import { MediaPopover } from './media-popover'
@@ -143,21 +143,8 @@ export const MediaEmbedElement = withHOC(
     const width = useResizableStore().get.width()
     const provider = embed?.provider
 
-    const captionTextareaRef = useRef<HTMLTextAreaElement>(null)
-
-    const onCaptionButtonClick = () => {
-      if (captionTextareaRef.current) {
-        captionTextareaRef.current.focus()
-      }
-    }
-
-    console.log('mediaEmbedElement render')
-
     return (
-      <MediaPopover
-        pluginKey={ELEMENT_MEDIA_EMBED}
-        onCaptionButtonClick={onCaptionButtonClick}
-      >
+      <MediaPopover pluginKey={ELEMENT_MEDIA_EMBED}>
         <PlateElement
           className={cn('relative py-2.5', className)}
           ref={ref}
@@ -260,7 +247,6 @@ export const MediaEmbedElement = withHOC(
               <CaptionTextareaSimple
                 placeholder={'Write a caption...'}
                 readOnly={readOnly}
-                ref={captionTextareaRef}
               />
             </Caption>
           </figure>

@@ -36,12 +36,7 @@ export interface MediaPopoverProps {
   onCaptionButtonClick?: () => void
 }
 
-export function MediaPopover({
-  children,
-  pluginKey,
-  url,
-  onCaptionButtonClick,
-}: MediaPopoverProps) {
+export function MediaPopover({ children, pluginKey, url }: MediaPopoverProps) {
   const { toast } = useToast()
   const readOnly = useReadOnly()
   const selected = useSelected()

@@ -8,7 +8,6 @@ import { MediaPopover } from './media-popover'
 import { Resizable, ResizeHandle, mediaResizeHandleVariants } from './resizable'
 
 import { CaptionTextareaSimple } from '@/components/patch/CaptionTextArea'
-import { useRef } from 'react'
 
 export const ImageElement = withHOC(
   ResizableProvider,
@@ -24,20 +23,8 @@ export const ImageElement = withHOC(
 
       const width = useResizableStore().get.width()
 
-      const captionTextareaRef = useRef<HTMLTextAreaElement>(null)
-
-      const onCaptionButtonClick = () => {
-        if (captionTextareaRef.current) {
-          captionTextareaRef.current.focus()
-        }
-      }
-
       return (
-        <MediaPopover
-          pluginKey={ELEMENT_IMAGE}
-          url={url}
-          onCaptionButtonClick={onCaptionButtonClick}
-        >
+        <MediaPopover pluginKey={ELEMENT_IMAGE} url={url}>
           <PlateElement
             className={cn('py-2.5', className)}
             ref={ref}
@@ -76,7 +63,6 @@ export const ImageElement = withHOC(
                 <CaptionTextareaSimple
                   placeholder={'Write a caption...'}
                   readOnly={readOnly}
-                  ref={captionTextareaRef}
                 />
               </Caption>
             </figure>
