@@ -156,7 +156,7 @@ export const MediaEmbedElement = withHOC(
               options={{
                 align,
                 maxWidth: isTweet ? 550 : '100%',
-                minWidth: isTweet ? 300 : 100,
+                minWidth: isTweet ? 250 : 100,
               }}
             >
               <ResizeHandle
