@@ -1,10 +1,22 @@
 import { Post } from '@/components/Post'
 import { getSupabaseWithSessionHeaders } from '@/lib/auth.supabase.server'
+import { getPostListClient } from '@/lib/posts'
 import { getPostById, getPostList, search } from '@/lib/posts.server'
 import { isUuid } from '@/lib/utils'
 import { PostListData, PostRecord } from '@/types/Editor'
+import { SEOHandle } from '@nasa-gcn/remix-seo'
 import { LoaderFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+
+export const handle: SEOHandle = {
+  getSitemapEntries: async (request) => {
+    const { list } = await getPostListClient()
+
+    return list.map((post) => {
+      return { route: `/${post.id}`, priority: 0.7 }
+    })
+  },
+}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { postId } = params
@@ -79,6 +91,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     )
   }
 }
+
 export default function Index() {
   const { postId, post, list } = useLoaderData<typeof loader>()
 

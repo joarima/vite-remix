@@ -1,5 +1,10 @@
 import { getSupabaseWithSessionHeaders } from '@/lib/auth.supabase.server'
+import { SEOHandle } from '@nasa-gcn/remix-seo'
 import { ActionFunctionArgs, json, redirect } from '@remix-run/node'
+
+export const handle: SEOHandle = {
+  getSitemapEntries: () => null,
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const { supabase, headers, session } = await getSupabaseWithSessionHeaders({

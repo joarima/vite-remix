@@ -2,12 +2,17 @@ import NewPost from '@/components/NewPost'
 import { getSupabaseWithSessionHeaders } from '@/lib/auth.supabase.server'
 import { useAuth } from '@/lib/auth.supabaseClient'
 import { savePost } from '@/lib/posts.server'
+import { SEOHandle } from '@nasa-gcn/remix-seo'
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   json,
   redirect,
 } from '@remix-run/node'
+
+export const handle: SEOHandle = {
+  getSitemapEntries: () => null,
+}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await getSupabaseWithSessionHeaders({

@@ -1,6 +1,11 @@
 import { S3Client } from '@aws-sdk/client-s3'
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
+import { SEOHandle } from '@nasa-gcn/remix-seo'
 import { ActionFunctionArgs, json } from '@remix-run/node'
+
+export const handle: SEOHandle = {
+  getSitemapEntries: () => null,
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
