@@ -2,13 +2,13 @@ import { vitePlugin as remix } from '@remix-run/dev'
 import { vercelPreset } from '@vercel/remix/vite'
 import path from 'path'
 import { defineConfig } from 'vite'
-import envOnly from 'vite-env-only'
+import { envOnlyMacros } from 'vite-env-only'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    envOnly(),
+    envOnlyMacros(),
     tsconfigPaths(),
     remix({
       future: {
