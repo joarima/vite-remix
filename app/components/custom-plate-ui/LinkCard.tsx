@@ -115,7 +115,12 @@ export const LinkCardElement = withRef<typeof PlateElement>(
             >
               <div className="flex-1 sm:max-w-[50%] p-2 h-auto">
                 {image ? (
-                  <img className="w-full" src={image} />
+                  <img
+                    className="w-full"
+                    src={image}
+                    decoding="async"
+                    loading="lazy"
+                  />
                 ) : (
                   <p className="flex-1">no image</p>
                 )}

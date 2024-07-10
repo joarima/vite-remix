@@ -49,6 +49,8 @@ export const ImageElement = withHOC(
                     'rounded-sm',
                     focused && selected && 'ring-2 ring-ring ring-offset-2'
                   )}
+                  decoding="async"
+                  loading="lazy"
                   {...nodeProps}
                 />
                 <ResizeHandle

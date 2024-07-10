@@ -35,9 +35,19 @@ export default function Header() {
             onClick={resetSearch}
           >
             {!hydrated || theme == 'light' ? (
-              <img src="owl.png" className="h-12" />
+              <img
+                src="owl.png"
+                className="h-12"
+                decoding="async"
+                loading="lazy"
+              />
             ) : (
-              <img src="owlwhite.png" className="h-12" />
+              <img
+                src="owlwhite.png"
+                className="h-12"
+                decoding="async"
+                loading="lazy"
+              />
             )}
           </Link>
           <nav className="flex gap-4 flex-1 justify-start sm:justify-center ml-4 sm:ml-0">

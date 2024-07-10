@@ -116,7 +116,12 @@ const Ogp = (readOnly: boolean, url?: string) => {
           <p className="mt-4">{ogpInfo?.description}</p>
         </div>
         {ogpInfo?.image ? (
-          <img className="flex-1 max-w-[50%] p-2" src={ogpInfo?.image} />
+          <img
+            className="flex-1 max-w-[50%] p-2"
+            src={ogpInfo?.image}
+            decoding="async"
+            loading="lazy"
+          />
         ) : (
           <p className="flex-1">no image</p>
         )}
