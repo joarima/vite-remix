@@ -1,4 +1,10 @@
-import { deleteDraft, getDraft } from '@/lib/editor'
+import { isAfter } from '@/lib/date'
+import {
+  deleteDraft,
+  deletePostDraft,
+  getDraft,
+  getPostDraft,
+} from '@/lib/editor'
 import { PostRecord } from '@/types/Editor'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useNavigate, useRevalidator } from '@remix-run/react'
@@ -6,7 +12,11 @@ import { Value } from '@udecode/plate-common'
 import { useEffect, useMemo, useState } from 'react'
 import { useToast } from '../ui/use-toast'
 
-export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
+export function usePostEditor(
+  isLoggedIn: boolean,
+  record?: PostRecord,
+  isNewPost?: boolean
+) {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [initialValue, setInitialValue] = useState<Value | undefined>(
@@ -28,6 +38,16 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
         setIsHydrated(true)
       }
     } else {
+      if (isLoggedIn && record?.id) {
+        const draftJson = getPostDraft(record?.id)
+        if (draftJson) {
+          const isAfterUpdated = isAfter(draftJson.updatedAt, record.updatedAt)
+          if (isAfterUpdated) {
+            setInitialValue(draftJson.content as Value)
+            return
+          }
+        }
+      }
       setInitialValue(record?.content)
     }
     if (record && initialValue) {
@@ -71,6 +91,7 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
         body: formData,
       }).then((res: Response) => {
         if (res.status === 200) {
+          deletePostDraft(record.id)
           revalidator.revalidate()
           toast({
             title: 'post updated.',
@@ -88,6 +109,7 @@ export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
         body: formData,
       }).then((res: Response) => {
         if (res.status === 200) {
+          revalidator.revalidate()
           toast({
             title: 'new post created.',
           })

@@ -19,7 +19,7 @@ import { Checkbox } from '../ui/checkbox'
 import { Skeleton } from '../ui/skeleton'
 
 import { useAuth } from '@/lib/auth.supabaseClient'
-import { saveDraft } from '@/lib/editor'
+import { deletePostDraft, saveDraft, savePostDraft } from '@/lib/editor'
 import { plugins } from '@/lib/plate/plugins'
 import { usePostEditor } from './PostEditor.hooks'
 
@@ -29,6 +29,7 @@ type EditorProps = {
 }
 
 export function PostEditor({ record, isNewPost = false }: EditorProps) {
+  const { isLoggedIn } = useAuth()
   const {
     initialValue,
     setEditorState,
@@ -38,11 +39,10 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
     onSave,
     isHydrated,
     deletePost,
-  } = usePostEditor(record, isNewPost)
+  } = usePostEditor(isLoggedIn, record, isNewPost)
 
   const containerRef = useRef(null)
   const id = 'pEditor'
-  const { isLoggedIn } = useAuth()
 
   const postId = record?.id
 
@@ -106,6 +106,15 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
                   }
                   if (isNewPost) {
                     saveDraft(state)
+                  }
+                  if (isLoggedIn && postId !== undefined) {
+                    if (
+                      JSON.stringify(state) !== JSON.stringify(record?.content)
+                    ) {
+                      savePostDraft(postId, state)
+                    } else {
+                      deletePostDraft(postId)
+                    }
                   }
                 }}
               >

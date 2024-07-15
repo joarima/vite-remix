@@ -14,3 +14,22 @@ export function getDraft() {
 export function deleteDraft() {
   localStorage.removeItem('post-draft')
 }
+
+export function savePostDraft(postId: string, draft: Value) {
+  const updatedAt = new Date().toISOString()
+  localStorage.setItem(
+    `post-draft-${postId}`,
+    `{"updatedAt":"${updatedAt}","content":${JSON.stringify(draft)}}`
+  )
+}
+
+export function getPostDraft(postId: string) {
+  if (typeof localStorage === 'undefined') return undefined
+  const jsonStr = localStorage.getItem(`post-draft-${postId}`)
+  if (!jsonStr) return undefined
+  return JSON.parse(jsonStr)
+}
+
+export function deletePostDraft(postId: string) {
+  localStorage.removeItem(`post-draft-${postId}`)
+}
