@@ -1,9 +1,8 @@
 import { Button } from '@/components/ui/button'
-import { useNavigate, useRevalidator } from '@remix-run/react'
+import { useRevalidator } from '@remix-run/react'
 import { useToast } from '../ui/use-toast'
 
 export default function SignOut() {
-  const navigate = useNavigate()
   const { toast } = useToast()
   const revalidator = useRevalidator()
   const onClick = () => {
@@ -15,7 +14,6 @@ export default function SignOut() {
         toast({
           title: 'sign out.',
         })
-        navigate('/')
       } else {
         toast({
           title: 'some error occurred.',

@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 // import { supabaseServerClient } from '@/lib/supabase.server'
-import { useNavigate, useRevalidator } from '@remix-run/react'
+import { useRevalidator } from '@remix-run/react'
 import { useState } from 'react'
 
 export default function SignInDialog() {
@@ -20,7 +20,6 @@ export default function SignInDialog() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
-  const navigate = useNavigate()
   const { toast } = useToast()
   const revalidator = useRevalidator()
 
@@ -38,7 +37,6 @@ export default function SignInDialog() {
           title: 'sign in.',
         })
         setDialogOpen(false)
-        navigate('/')
       } else {
         toast({
           title: 'some error occurred.',
