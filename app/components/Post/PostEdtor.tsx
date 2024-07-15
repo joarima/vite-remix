@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { format } from '@/lib/date'
 import { PostRecord } from '@/types/Editor'
 import { LoaderCircle } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { Skeleton } from '../ui/skeleton'
 
@@ -39,20 +39,13 @@ export function PostEditor({ record, isNewPost = false }: EditorProps) {
     onSave,
     isHydrated,
     deletePost,
-  } = usePostEditor(isLoggedIn, record, isNewPost)
+    editorKey,
+  } = usePostEditor(record, isNewPost)
 
   const containerRef = useRef(null)
   const id = 'pEditor'
 
   const postId = record?.id
-
-  const [editorKey, setEditorKey] = useState<string | undefined>(postId)
-
-  useEffect(() => {
-    if (postId) {
-      setEditorKey(crypto.randomUUID())
-    }
-  }, [postId])
 
   return (
     <div>

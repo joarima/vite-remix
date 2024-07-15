@@ -1,3 +1,4 @@
+import { userAtom } from '@/lib/auth.supabaseClient'
 import { isAfter } from '@/lib/date'
 import {
   deleteDraft,
@@ -9,19 +10,17 @@ import { PostRecord } from '@/types/Editor'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useNavigate, useRevalidator } from '@remix-run/react'
 import { Value } from '@udecode/plate-common'
+import { useAtom } from 'jotai'
 import { useEffect, useMemo, useState } from 'react'
 import { useToast } from '../ui/use-toast'
 
-export function usePostEditor(
-  isLoggedIn: boolean,
-  record?: PostRecord,
-  isNewPost?: boolean
-) {
+export function usePostEditor(record?: PostRecord, isNewPost?: boolean) {
+  const [user] = useAtom(userAtom)
   const navigate = useNavigate()
   const { toast } = useToast()
-  const [initialValue, setInitialValue] = useState<Value | undefined>(
-    isNewPost ? undefined : record?.content
-  )
+  const [initialValue, setInitialValue] = useState<Value | undefined>(undefined)
+  const postId = record?.id
+  const [editorKey, setEditorKey] = useState<string | undefined>(postId)
 
   // editor state(content) to save
   const [editorState, setEditorState] = useState<Value | undefined>(
@@ -38,22 +37,36 @@ export function usePostEditor(
         setIsHydrated(true)
       }
     } else {
-      if (isLoggedIn && record?.id) {
-        const draftJson = getPostDraft(record?.id)
-        if (draftJson) {
-          const isAfterUpdated = isAfter(draftJson.updatedAt, record.updatedAt)
-          if (isAfterUpdated) {
-            setInitialValue(draftJson.content as Value)
-            return
+      if (typeof localStorage !== 'undefined' && user) {
+        if (record?.id) {
+          const draftJson = getPostDraft(record?.id)
+          if (draftJson) {
+            const isAfterUpdated = isAfter(
+              draftJson.updatedAt,
+              record.updatedAt
+            )
+            if (isAfterUpdated) {
+              setInitialValue(draftJson.content as Value)
+              setEditorKey(crypto.randomUUID())
+              return
+            }
           }
         }
+        setInitialValue(record?.content)
+      } else {
+        setInitialValue(record?.content)
       }
-      setInitialValue(record?.content)
     }
     if (record && initialValue) {
       setIsHydrated(true)
     }
-  }, [record])
+  }, [record, user])
+
+  useEffect(() => {
+    if (postId) {
+      setEditorKey(crypto.randomUUID())
+    }
+  }, [postId])
 
   // post public open state
   const [open, setOpen] = useState<boolean>(record?.isOpen ?? false)
@@ -167,5 +180,6 @@ export function usePostEditor(
     onSave,
     isHydrated,
     deletePost,
+    editorKey,
   }
 }
