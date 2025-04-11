@@ -1,3 +1,4 @@
+import { postIdAtom } from '@/atoms/PostIdAtoms'
 import { searchAtom } from '@/atoms/SearchAtom'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,25 +10,31 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { useNavigate } from '@remix-run/react'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { Search as SearchIcon } from 'lucide-react'
 import { useState } from 'react'
 
 export function Search() {
+  const searchWord = useAtomValue(searchAtom)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-  const [word, setWord] = useState<string | undefined>(undefined)
+  const [word, setWord] = useState<string | undefined>(searchWord)
   const navigate = useNavigate()
 
   const setSearchWord = useSetAtom(searchAtom)
+  const postId = useAtomValue(postIdAtom)
 
   const onSearch = () => {
     setSearchWord(word)
 
-    if (!word) return
+    if (!word || word.length === 0) {
+      setWord(undefined)
+      setDialogOpen(false)
+      navigate(`/${postId}`)
+    }
 
     setDialogOpen(false)
     navigate(`/?q=${word}`)
-    setWord(undefined)
+    // setWord(undefined)
   }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -37,7 +44,15 @@ export function Search() {
   }
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <Dialog
+      open={dialogOpen}
+      onOpenChange={(open) => {
+        // if(!open) {
+        //   something
+        // }
+        setDialogOpen(open)
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           className="font-thin text-xs px-2"
@@ -59,9 +74,10 @@ export function Search() {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Input
-              id="email"
-              type="text"
+              id="search-input"
+              type="search"
               className="col-span-3"
+              defaultValue={searchWord}
               onChange={(e) => {
                 setWord(e.target.value)
               }}

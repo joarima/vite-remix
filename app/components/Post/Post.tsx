@@ -1,9 +1,11 @@
 import { PostEditor } from '@/components/Post/PostEdtor'
 
+import { postIdAtom } from '@/atoms/PostIdAtoms'
 import { searchAtom } from '@/atoms/SearchAtom'
 import { PostListData, PostRecord } from '@/types/Editor'
 import { PlateController } from '@udecode/plate-common'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 import { Pagination } from './Pagination'
 
 type PostProps = {
@@ -14,6 +16,11 @@ type PostProps = {
 
 export function Post({ postId, record, posts }: PostProps) {
   const searchWord = useAtomValue(searchAtom)
+  const setPostId = useSetAtom(postIdAtom)
+
+  useEffect(() => {
+    setPostId(record.id)
+  }, [record.id, setPostId])
 
   return (
     <div className="flex-1">
