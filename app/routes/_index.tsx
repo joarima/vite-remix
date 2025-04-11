@@ -31,10 +31,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     const latestPostId = list[0].id
 
-    const { data } = await getPostById({
+    const { data, error } = await getPostById({
       supabase: supabase,
       postId: latestPostId,
+      isLoggedIn: !!session,
     })
+
+    if (error) {
+      throw json('error occurred', { status: 500 })
+    }
 
     if (!data) {
       throw json('Not Found', { status: 404 })
