@@ -28,6 +28,7 @@ export function Search() {
 
     if (!word || word.length === 0) {
       setWord(undefined)
+      setSearchWord(undefined)
       setDialogOpen(false)
       navigate(`/${postId}`)
     }
