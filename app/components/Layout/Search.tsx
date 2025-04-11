@@ -31,6 +31,7 @@ export function Search() {
       setSearchWord(undefined)
       setDialogOpen(false)
       navigate(`/${postId}`)
+      return
     }
 
     setDialogOpen(false)
