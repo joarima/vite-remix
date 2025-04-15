@@ -29,27 +29,25 @@ export default function Header() {
     <nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-gray-950/90 font-sans font-thin h-16">
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex h-16">
-          <Link
-            to={'/'}
-            className="flex flex-0 sm:flex-1 flex-shrink-0 items-center ml-[5px] sm:ml-8 justify-start"
-            onClick={resetSearch}
-          >
-            {!hydrated || theme == 'light' ? (
-              <img
-                src="owl.png"
-                className="h-12"
-                decoding="async"
-                loading="lazy"
-              />
-            ) : (
-              <img
-                src="owlwhite.png"
-                className="h-12"
-                decoding="async"
-                loading="lazy"
-              />
-            )}
-          </Link>
+          <div className="flex flex-0 sm:flex-1 flex-shrink-0 items-center ml-[5px] sm:ml-8 justify-start">
+            <Link to={'/'} onClick={resetSearch}>
+              {!hydrated || theme == 'light' ? (
+                <img
+                  src="owl.png"
+                  className="h-12"
+                  decoding="async"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src="owlwhite.png"
+                  className="h-12"
+                  decoding="async"
+                  loading="lazy"
+                />
+              )}
+            </Link>
+          </div>
           <nav className="flex gap-4 flex-1 justify-start sm:justify-center ml-4 sm:ml-0">
             <Link
               to={'/'}
